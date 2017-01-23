@@ -1,0 +1,208 @@
+January 23, 2017
+Phylogenetics Workshop
+
+Justin Shaffer
+justinparkshaffer@gmail.com
+
+As an example, I will use a sample of the genus Gliocladiopsis (Nectriaceae, 
+Hypocreales, Sordariomycetes) that includes species closely related to some of the fungi 
+from the Panama seed project.
+
+#########################################################################################
+# Before lab meeting - construct ITS phylogeny using given sequence alignment
+#########################################################################################
+
+Some commonly used tools for aligning sequences and building phylogenies are available
+through the CIPRES web portal, an NSF-funded resource based at UCSD. If you don't already
+have an account with CIPRES, please create one by following the link below. If you
+already have an account you can skip to (1.) below.
+
+http://www.phylo.org/sub_sections/portal/
+
+Follow the link to use the CIPRES science gateway and you will be taken to a screen
+to log in or register a new account.
+
+CIPRES organizes projects into FOLDERS. In each FOLDER, you can upload DATA, which you
+then use to perform TASKS. TASKS use existing software such as sequence alignment and tree
+reconstruction tools.
+
+1. Create a new folder for the workshop called, "Lab workshop".
+
+2. Using the navigator on the left side of the screen, click on "Data" in the
+	Lab workshop folder. Click the link to Upload/Enter data, and upload the sequence
+	alignment file, "gliocladiopsis_its_aligned_manual.fas". In addition to the taxon
+	and gene that these sequences represent, the filename shorthand also tells you
+	that the sequences are aligned, and have been verified manually by eye. I will review
+	alignment during our meeting but for now know that the sequences are aligned and
+	ready to use for tree building.
+	
+3. Using the navigator, click on "Tasks" in the Lab workshop folder. Click the link
+	to Create a new task. Select the alignment file you uploaded as the input data. 
+	Select "RAxML-HPC2 on XSEDE" as the tool. Click the link to edit the input
+	parameters. You can now see all of the parameters for RAxML.Change "Maximum hours 
+	to Run" to 24. Change "Estimate proportion of invariable sites" to yes. Click the
+	link to expand the advanced parameters. Change "Nucleic Acid Options" to GTRGAMMA.
+	Under "Configure Bootstrapping", click the box to "Print branch lengths", and change
+	"Bootstrap iterations" to 1000. Click the link to save parameters; you will see
+	a prompt letting you know the maximum amount of time run will use - click OK; you will
+	see another prompt telling you that Alexis doens't like the model of sequence
+	evolution to include invariant sites - click OK. Give your task the description,
+	"Gliocladiopsis ITS ML invariant" to indicate that our maximum likelihood run uses
+	a model that includes invariant sites. Click outside of the description text box any
+	where on the screen to set the description. Click Save and Run Task.
+	
+4. Once your task is complete, you will receive an email notification. You will also see
+	a link to view output in the task summary list. In the output screen for our task,
+	check boxes for all output files that begin with "RAxML_", there are five. Download
+	the selected files and move them into the same directory as the alignment file.
+	
+5. We will use this tree during our meeting. If you would like to view your tree before 
+	our meeting, I recommend using Figtree which works for PC and Mac and is free:
+	
+	http://tree.bio.ed.ac.uk/software/figtree/
+	
+	You can open the output file, "RAxML_bipartitions.result" using Figtree. Figtree
+	will recognize the bootstrap values from the analysis and upload them when you open
+	the file. You can turn these on using the Node Labels feature.
+
+#########################################################################################
+# 01. Gliocladiopsis ITS maximum likelihood phylogeny
+#########################################################################################
+
+sequences
+	glio_its.fas
+		- fasta file with raw sequences
+	glio_its_aligned.fas
+		- fasta file with sequences after alignment in MUSCLE through CIPRES
+	glio_its_aligned.nex
+		- nexus file with aligned sequences showing manual editing in Mesquite
+	glio_its_aligned_manual.fas
+		- fasta file with aligned and manually edited sequences
+	glio_its_modeltest.txt
+		- results output from jModelTest
+		
+trees
+	glio_its_MLinvar
+		- maximum likelihood phylogeny inferred using RAxML through CIPRES
+			- model of sequence evolution: general time reversible (GTR) with
+				gamma rate change parameter and including invariant sites (I)
+			- support: from 1,000 bootstrap replicates
+				- note: phylogenetic bootstrapping is always with replacement
+			- printed branch lengths
+			- infer best tree simultaneously with bootstrap trees
+			- comes with output files
+				RAxML_bestTree.result
+					- newick tree file of the best ML tree
+				RAxML_bipartitions.result
+					- newick tree file of the best ML tree with branch lengths and
+						values from the bootstrap analysis stored
+					- I use this one for viewing and downstream stuff
+				RAxML_bipartitionsBranchLabels.result
+					- same file as above because we argued to have branch lengths printed
+						onto the tree when initiating the run
+				RAxML_bootstrap.result
+					- newick tree file with all bootstrap trees
+				RAxML_info.result
+					- information regarding the run
+
+#########################################################################################
+# 02. Gliocladiopsis maximum likelihood phylogeny (supertree approach)
+#########################################################################################
+
+sequences: here are the same types of sequence files for ITS, RPB1, and TEF including
+all sequences available on genbank, and also:
+	glio_mlsa_aligned_manual.nex
+		- nexus file with aligned and manually edited sequences for individual genes
+			contatenated into a supermatrix
+	glio_mlsa_aligned_manual.fas
+		- fasta file version of the above nexus file
+	glio_mlsa_partitions.txt
+		- text file with partitions formatted for RAxML
+	
+trees: here are the same types of tree files for ITS, RPB1, and TEF, and also that for
+the MLSA (supermatrix approach) to compare with the final supertree. This supermatrix
+is missing data for RPB1.
+
+matrix representation with parsimony (MRP): here are files to conduct the supertree
+analysis:
+	- PAUP*
+		- input file
+			glio_supertrees.nex
+				- nexus file with final trees
+		- create MRP
+		- input MRP
+		- run heuristic parsimony search
+		- examine individual trees and produce consensus tree
+		- view tree in figtree
+
+
+#########################################################################################
+# 03. Gliocladiopsis MLSA maximum likelihood phylogeny (supermatrix approach)
+#########################################################################################
+
+sequences: here are the same types of sequences files for TEF and RPB1, and also:
+	glio_mlsa_aligned_manual.nex
+		- nexus file with aligned and manually edited sequences for individual genes
+			contatenated into a supermatrix
+	glio_mlsa_aligned_manual.fas
+		- fasta file version of the above nexus file
+	glio_mlsa_partitions.txt
+		- text file with partitions formatted for RAxML
+	glio_mlsa_partitions_notes.txt
+		- text file with partitions and instructions for setting them in PAUP*
+		
+trees: here are the same types of tree files for TEF and RPB1, and also that for the MLSA
+
+view alignment in Mesquite
+	glio_mlsa_aligned_manual.nex
+
+important step: congruence testing prior to concatenation
+	- Partition homogeneity test in PAUP*
+		- upload data file
+			glio_mlsa_aligned_manual.nex
+		- input partitions
+			glio_mlsa_partitions_notes.txt
+		- run partition homogeneity test
+
+alternative: topology testing
+	- Many tests available in PAUP* (tree scores)
+		- upload tree data file
+		- root trees
+		- upload matrix data file
+		- analyze tree scores
+		
+#########################################################################################
+# 04. Oxalobacteriaceae phylogenetic analyses in R
+#########################################################################################
+
+Use workshop.R
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
